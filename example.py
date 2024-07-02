@@ -24,11 +24,15 @@ def eval_metrics(actual, pred):
 if __name__ == "__main__":
     warnings.filterwarnings("ignore")
     np.random.seed(40)
+    csv_url = (
+        "https://raw.githubusercontent.com/mlflow/mlflow/master/tests/datasets/winequality-red.csv"
+    )
     try:
-        data = pd.read_csv("/home/sanjay/Desktop/ml_model_deployment_mlflow_v2/data/olist_customers_dataset.csv")
+        data = pd.read_csv(csv_url, sep=";")
     except Exception as e:
-        logger.error("Error in reading data: {}".format(e))
-        raise e
+        logger.exception(
+            "Unable to download training & test CSV, check your internet connection. Error: %s", e
+        )
 
     train, test = train_test_split(data)
     train_x = train.drop(['quality'], axis=1)
